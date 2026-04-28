@@ -3,14 +3,18 @@ require 'conexao.php';
 
 // Filtros
 $filtroNome       = trim($_GET['nome']        ?? '');
+$filtroCargo      = trim($_GET['cargo']       ?? '');
 $filtroDataInicio = trim($_GET['data_inicio'] ?? '');
 $filtroDataFim    = trim($_GET['data_fim']    ?? '');
 
-// Buscar lista de funcionários para o datalist
+// Listas para selects/datalists
 $listaFuncionarios = $pdo->query("SELECT nome FROM funcionarios ORDER BY nome")->fetchAll(PDO::FETCH_COLUMN);
+$listaCargos       = $pdo->query(
+    "SELECT DISTINCT cargo FROM funcionarios WHERE cargo IS NOT NULL AND cargo <> '' ORDER BY cargo"
+)->fetchAll(PDO::FETCH_COLUMN);
 
 // Monta query com filtros opcionais
-$sql    = "SELECT rp.id, rp.tipo, rp.data_hora, f.nome
+$sql    = "SELECT rp.id, rp.tipo, rp.data_hora, f.nome, f.cargo
            FROM registro_ponto rp
            JOIN funcionarios f ON rp.funcionario_id = f.id
            WHERE 1=1";
@@ -19,6 +23,10 @@ $params = [];
 if ($filtroNome !== '') {
     $sql .= " AND f.nome LIKE :nome";
     $params[':nome'] = '%' . $filtroNome . '%';
+}
+if ($filtroCargo !== '') {
+    $sql .= " AND f.cargo = :cargo";
+    $params[':cargo'] = $filtroCargo;
 }
 if ($filtroDataInicio !== '') {
     $sql .= " AND rp.data_hora >= :data_inicio";
@@ -52,7 +60,7 @@ $registros = $stmt->fetchAll();
 
         <!-- Formulário de filtro -->
         <form method="GET" class="row g-2 align-items-end mb-4">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <label class="form-label">Funcionário</label>
                 <input type="text" name="nome" class="form-control" list="nomes"
                        value="<?= htmlspecialchars($filtroNome) ?>" placeholder="Digite o nome">
@@ -62,17 +70,28 @@ $registros = $stmt->fetchAll();
                     <?php endforeach; ?>
                 </datalist>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
+                <label class="form-label">Cargo</label>
+                <select name="cargo" class="form-select">
+                    <option value="">Todos</option>
+                    <?php foreach ($listaCargos as $c): ?>
+                        <option value="<?= htmlspecialchars($c) ?>" <?= $filtroCargo === $c ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($c) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="col-md-2">
                 <label class="form-label">Data Inicial</label>
                 <input type="date" name="data_inicio" class="form-control"
                        value="<?= htmlspecialchars($filtroDataInicio) ?>">
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <label class="form-label">Data Final</label>
                 <input type="date" name="data_fim" class="form-control"
                        value="<?= htmlspecialchars($filtroDataFim) ?>">
             </div>
-            <div class="col-md-2 d-flex gap-2">
+            <div class="col-md-3 d-flex gap-2">
                 <button type="submit" class="btn btn-primary flex-fill"><i class="bi bi-search me-1"></i>Filtrar</button>
                 <a href="registros.php" class="btn btn-outline-secondary" title="Limpar filtros"><i class="bi bi-x-lg"></i></a>
             </div>
@@ -94,6 +113,7 @@ $registros = $stmt->fetchAll();
                     <thead class="table-light">
                         <tr>
                             <th>Funcionário</th>
+                            <th>Cargo</th>
                             <th>Data</th>
                             <th>Horário</th>
                             <th>Tipo</th>
@@ -103,6 +123,7 @@ $registros = $stmt->fetchAll();
                         <?php foreach ($registros as $row): ?>
                             <tr>
                                 <td><?= htmlspecialchars($row['nome']) ?></td>
+                                <td><?= htmlspecialchars($row['cargo'] ?? '') ?></td>
                                 <td><?= date('d/m/Y', strtotime($row['data_hora'])) ?></td>
                                 <td><?= date('H:i:s', strtotime($row['data_hora'])) ?></td>
                                 <td>
