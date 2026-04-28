@@ -1,3 +1,7 @@
+<?php
+require 'conexao.php';
+require 'auth_admin.php';
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -14,6 +18,11 @@
     <div class="container py-5">
         <h1 class="text-center mb-2"><i class="bi bi-clock-history me-2 text-primary"></i>Sistema de Ponto</h1>
         <p class="text-center text-muted mb-5">Gerenciamento de ponto eletrônico</p>
+        <div class="text-end mb-2">
+          <a href="logout_admin.php" class="btn btn-sm btn-outline-danger">
+            <i class="bi bi-box-arrow-right me-1"></i>Sair
+          </a>
+        </div>
 
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center">
             <div class="col">

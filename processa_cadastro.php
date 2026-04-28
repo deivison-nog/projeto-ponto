@@ -1,5 +1,6 @@
 <?php
 require 'conexao.php';
+require 'auth_admin.php';
 
 // Função para gerar matrícula única
 function gerarMatriculaUnica($pdo) {

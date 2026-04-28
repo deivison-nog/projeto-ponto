@@ -1,5 +1,6 @@
 <?php
 require 'conexao.php';
+require 'auth_admin.php';
 
 // Filtros
 $filtroNome       = trim($_GET['nome']        ?? '');

@@ -2,6 +2,7 @@
 // mudar_situacao.php
 
 include 'conexao.php';
+require 'auth_admin.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = isset($_POST['id']) ? intval($_POST['id']) : 0;

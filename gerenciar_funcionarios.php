@@ -1,5 +1,6 @@
 <?php
 include 'conexao.php';
+require 'auth_admin.php';
 
 /**
  * Filtro por cargo via GET:

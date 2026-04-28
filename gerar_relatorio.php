@@ -1,5 +1,6 @@
 <?php
 require 'conexao.php';
+require 'auth_admin.php';
 require_once(__DIR__ . '/fpdf/fpdf.php');
 
 // ── Parâmetros do filtro ──────────────────────────────────────────────────────
