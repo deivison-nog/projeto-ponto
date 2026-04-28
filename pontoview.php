@@ -54,25 +54,24 @@ if (isset($_GET['logout'])) {
 }
 
 // Login
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cpf'])) {
-    $cpf = preg_replace('/\D/', '', trim($_POST['cpf']));
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['matricula'])) {
+    $matricula = trim($_POST['matricula']);
 
-    if ($cpf === '') {
-        $erro = 'Informe o CPF.';
+    if ($matricula === '') {
+        $erro = 'Informe a matrícula.';
     } else {
-        // Normaliza formato do CPF para comparação (aceita com ou sem pontuação no banco)
         $stmt = $pdo->prepare(
-            "SELECT id, nome, cargo, departamento, cpf
+            "SELECT id, nome, cargo, departamento
              FROM funcionarios
-             WHERE REPLACE(REPLACE(REPLACE(cpf, '.', ''), '-', ''), ' ', '') = :cpf
+             WHERE matricula = :matricula
                AND situacao = 'Ativo'
              LIMIT 1"
         );
-        $stmt->execute([':cpf' => $cpf]);
+        $stmt->execute([':matricula' => $matricula]);
         $func = $stmt->fetch();
 
         if (!$func) {
-            $erro = 'CPF não encontrado ou funcionário inativo. Verifique e tente novamente.';
+            $erro = 'Matrícula não encontrada ou funcionário inativo. Verifique e tente novamente.';
         } else {
             $_SESSION['pv_id']    = $func['id'];
             $_SESSION['pv_nome']  = $func['nome'];
@@ -206,11 +205,11 @@ if ($logado) {
 
       <form method="post" autocomplete="off" novalidate>
         <div class="mb-3">
-          <label for="cpf" class="form-label fw-semibold">CPF</label>
-          <input type="text" id="cpf" name="cpf" class="form-control cpf-input"
-                 placeholder="000.000.000-00" maxlength="18"
+          <label for="matricula" class="form-label fw-semibold">Matrícula</label>
+          <input type="text" id="matricula" name="matricula" class="form-control cpf-input"
+                 placeholder="Digite sua matrícula"
                  inputmode="numeric" required autofocus>
-          <div class="form-text text-muted">Digite apenas os números ou com pontuação.</div>
+          <div class="form-text text-muted">Digite o número da sua matrícula.</div>
         </div>
         <div class="d-grid mt-4">
           <button type="submit" class="btn btn-primary btn-lg">
@@ -221,17 +220,6 @@ if ($logado) {
     </div>
   </div>
 </div>
-
-<script>
-// Máscara de CPF no campo
-document.getElementById('cpf').addEventListener('input', function () {
-  let v = this.value.replace(/\D/g, '').substring(0, 11);
-  if (v.length > 9)      v = v.replace(/^(\d{3})(\d{3})(\d{3})(\d{0,2})/, '$1.$2.$3-$4');
-  else if (v.length > 6) v = v.replace(/^(\d{3})(\d{3})(\d{0,3})/, '$1.$2.$3');
-  else if (v.length > 3) v = v.replace(/^(\d{3})(\d{0,3})/, '$1.$2');
-  this.value = v;
-});
-</script>
 
 <?php else: ?>
 
