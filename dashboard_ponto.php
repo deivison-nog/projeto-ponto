@@ -43,9 +43,9 @@ function agrupar_pares_dashboard(array $eventos): array {
     return $pares;
 }
 
-function formatar_segundos_dash(int $seg): string {
-    $h = (int)floor($seg / 3600);
-    $m = (int)floor(($seg % 3600) / 60);
+function formatar_segundos_dash(int $segundos): string {
+    $h = (int)floor($segundos / 3600);
+    $m = (int)floor(($segundos % 3600) / 60);
     return sprintf('%02dh%02dm', $h, $m);
 }
 

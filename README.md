@@ -72,5 +72,5 @@ O PDF exibe, para cada funcionário, uma tabela com pares de entrada/saída por 
 - Bootstrap 5.3
 - Bootstrap Icons 1.11
 - [endroid/qr-code](https://github.com/endroid/qr-code) via Composer
-- [FPDF](http://www.fpdf.org/) para geração de PDF
+- [FPDF](https://www.fpdf.org/) para geração de PDF
 - [html5-qrcode](https://github.com/mebjas/html5-qrcode) (CDN) para leitura de QR Code via câmera
