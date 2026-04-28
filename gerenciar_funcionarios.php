@@ -40,12 +40,16 @@ $funcionarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <title>Gerenciar Funcionários</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body class="bg-light">
     <div class="container py-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="mb-0">Funcionários Cadastrados</h2>
-            <a href="cadastrar_funcionario.php" class="btn btn-success">Cadastrar Novo Funcionário</a>
+            <h2 class="mb-0"><i class="bi bi-people me-2 text-warning"></i>Funcionários Cadastrados</h2>
+            <div class="d-flex gap-2">
+                <a href="cadastrar_funcionario.php" class="btn btn-success"><i class="bi bi-person-plus me-1"></i>Cadastrar Novo</a>
+                <a href="index.php" class="btn btn-secondary"><i class="bi bi-arrow-left me-1"></i>Voltar</a>
+            </div>
         </div>
 
         <!-- Filtro por Cargo -->
@@ -67,6 +71,27 @@ $funcionarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <a href="gerenciar_funcionarios.php" class="btn btn-outline-secondary">Limpar</a>
             </div>
         </form>
+
+        <?php if (isset($_GET['sucesso'])): ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <?php if ($_GET['sucesso'] === 'cadastro'): ?>
+                    <i class="bi bi-check-circle me-1"></i> Funcionário cadastrado com sucesso!
+                <?php else: ?>
+                    <i class="bi bi-check-circle me-1"></i> Dados atualizados com sucesso!
+                <?php endif; ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        <?php elseif (isset($_GET['erro'])): ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle me-1"></i>
+                <?php if ($_GET['erro'] === 'campos_obrigatorios'): ?>
+                    Preencha todos os campos obrigatórios.
+                <?php else: ?>
+                    Ocorreu um erro ao salvar. Tente novamente.
+                <?php endif; ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        <?php endif; ?>
 
         <div class="card shadow-sm">
             <div class="card-body table-responsive">
