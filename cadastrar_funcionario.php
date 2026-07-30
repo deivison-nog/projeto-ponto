@@ -1,4 +1,4 @@
-<?php include 'conexao.php'; ?>
+<?php include 'conexao.php'; require 'auth_admin.php'; ?>
 
 <!DOCTYPE html>
 <html lang="pt-br">

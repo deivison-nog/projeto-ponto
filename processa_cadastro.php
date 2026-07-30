@@ -1,5 +1,6 @@
 <?php
 require 'conexao.php';
+require 'auth_admin.php';
 
 // Função para gerar matrícula única
 function gerarMatriculaUnica($pdo) {
@@ -91,7 +92,8 @@ try {
         ':situacao' => $situacao
     ]);
 
-    echo "Funcionário cadastrado com sucesso! <a href='gerenciar_funcionarios.php'>Ver funcionários</a>";
+    header('Location: gerenciar_funcionarios.php?sucesso=cadastro');
+    exit;
 
 } catch (PDOException $e) {
     die("Erro ao cadastrar funcionário: " . $e->getMessage());

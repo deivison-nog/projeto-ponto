@@ -3,6 +3,7 @@
 // Atualiza os dados do funcionário (via POST) usando PDO (conexao.php)
 
 require_once 'conexao.php';
+require 'auth_admin.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: gerenciar_funcionarios.php');
